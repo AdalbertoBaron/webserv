@@ -1,0 +1,160 @@
+Internet Relay Chat
+Summary: The goal of this project is to make you write your own IRC server. To do so, you will test your work with a real IRC client. Internet is ruled by solid and standards protocols that allow a strong interaction between every connected computer.
+It’s always good to know about it.
+
+Common Instructions
+• Your program should not crash in any circumstances (even when it runs out of memory), and should not quit unexpectedly. If this happens, your project will be considered non functional and will receive a 0 during the evaluation.
+• If the subject requires it, you must submit a Makefile which will compile your source files to the required output. Your Makefile must not relink.
+• Your Makefile must at least contain the rules $(NAME), all, clean, fclean and re.
+• We encourage you to create test programs for your project even though this work won’t have to be submitted and won’t be graded. It will give you a chance to easily test your work and your peers’ work. You will find those tests especially useful during your defense. Indeed, during defence, you are free to use your tests and/or the tests of the peer you are evaluating.
+• Submit your work to your assigned git repository. Only the work in the git repository will be graded. If Deepthought is assigned to grade your work, it will be done after your peer evaluations. If an error happens in any section of your work during
+Deepthought’s grading, the evaluation will stop.
+
+Introduction
+Internet Relay Chat or IRC is a textual communication protocol on the Internet. It is instantaneous communication mainly in the form of discussions in groups via discussion channels, but can also be used for one-to-one communication.
+IRC client programs connect to an IRC server to access a specific channel. IRC servers are connected between them to provide a global network with unique channels.
+
+Mandatory Part
+Program name ircserv
+Turn in files
+Makefile Yes
+Arguments
+External functs. Everything in C++ 98. socket, setsockopt,
+getsockname, getprotobyname, gethostbyname,
+getaddrinfo, freeaddrinfo, bind, connect, listen,
+accept, htons, htonl, ntohs, ntohl, inet_addr,
+inet_ntoa, send, recv, signal, lseek, fstat,fcntl, poll (or equivalent)
+Libft authorized
+Description Write an IRC server in C++ 98
+• You must write an IRC server in C++ 98.
+• If you need more C functions, you can use them but always prefer C++.
+• The C++ standard must be C++ 98. Your project must compile with it.
+• No external library, no Boost, etc...
+• Try to always use the most "C++" code possible (for example use <cstring> over <string.h>).
+• In the subject and the scale we will mention poll but you can use equivalent like select, kqueue, epoll.
+• Communication between client and server must be done via TCP/IP(v4) or (v6)
+• You won’t need to code a client
+• You won’t need to handle server to server communication
+• Your executable will be used as follows:
+./ircserv [host:port_network:password_network] <port> <password>
+
+◦ host is the hostname on which IRC must connect to join a already existing network
+◦ port_network is the server port on which IRC must connect on host
+◦ password_network is the password needed to connect on host
+◦ port is the port number on which your server will accept incoming connections.
+◦ password is the password needed by any IRC client who wants to connect to your server.
+◦ If host, port_network and password_network aren’t given, you must create a new IRC network
+• The server must be capable of handling multiple clients at the same time and never hang. Forking is not allowed, all I/O operations must be non blocking and use only 1 poll (or equivalent) for all (read, write, but also listen, ...)
+!
+We’ve let you use fcntl because MacOS X doesn’t implement write the
+same way as other Unix OSes.
+You must use non-blocking FD to have a result similar to other OSes.
+!
+Because you are using non-blocking FD, you could use read/recv or
+write/send functions without poll (or equivalent) and your server
+would be not blocking. But it would consume more system resources.
+So again trying to read/recv or write/send in any FD without going
+through a poll (or equivalent) will give you a mark equal to 0 and
+the end of the evaluation.
+!
+You can only use fcntl as follow: fcntl(fd, F_SETFL, O_NONBLOCK);
+Any other flags are forbidden.
+
+• You are of course expected to build a clean code. Verify absolutely every error and in cases where you might have a problem (partial data received, low bandwidth...)
+• To verify that your server correctly uses everything you send, an initial test can be done with nc (Use ctrl+d to send parts of the command):
+
+\$> nc 127.0.0.1 6667
+com^Dman^Dd
+\$>
+
+This will allow you to first send the letters com, man, d\n. You must first aggregate the packets to rebuild the command command to handle it.
+• Several IRC clients exist you must choose one as a reference and it will be used during the defense.
+To be compatible with this client you will need to implement at least some part of
+the IRC official RFC.
+• Using the client on your server must be like using it on any official IRC server but to be sure we will list the minimal required features.
+• You must be able to connect the reference client to your server without producing any error.
+• You must be able to authenticate, set a nickname, a username, join a channel, send and receive private messages using this client.
+• all messages from one client on a channel are sent to all other clients of the channel.
+• You must have operators and regular users.
+• Some operator’s specific actions/commands.
+
+
+
+Интернет-чат
+Резюме: цель этого проекта - заставить вас написать собственный IRC-сервер. Для этого вы протестируете свою работу с настоящим IRC-клиентом. Интернет управляется надежными и стандартными протоколами, которые обеспечивают тесное взаимодействие между каждым подключенным компьютером.
+Всегда хорошо об этом знать.
+
+Общие инструкции
+• Ваша программа не должна аварийно завершить работу ни при каких обстоятельствах (даже при нехватке памяти) и не должна неожиданно завершаться. Если это произойдет, ваш проект будет считаться нефункциональным и получит 0 во время оценки.
+• Если субъект требует этого, вы должны отправить Makefile, который скомпилирует ваши исходные файлы в требуемый вывод. Ваш Makefile не должен повторно связываться.
+• Ваш Makefile должен содержать как минимум правила $ (NAME), all, clean, fclean и re.
+• Мы рекомендуем вам создавать программы тестирования для вашего проекта, даже если эту работу не нужно будет отправлять и оценивать. Это даст вам возможность легко проверить свою работу и работу коллег. Вы найдете эти тесты особенно полезными во время защиты. Действительно, во время защиты вы можете использовать свои тесты и / или тесты партнера, которого вы оцениваете.
+• Отправьте свою работу в назначенный репозиторий git. Оцениваться будет только работа в репозитории git. Если DeepThreadt назначен для оценки вашей работы, это будет сделано после ваших оценок коллег. Если в каком-либо разделе вашей работы во время
+При выставлении оценок Deep Thinking оценка остановится.
+
+Вступление
+Internet Relay Chat или IRC - это текстовый протокол связи в Интернете. Это мгновенное общение, в основном в форме обсуждений в группах через каналы обсуждения, но также может использоваться для индивидуального общения.
+Клиентские программы IRC подключаются к серверу IRC для доступа к определенному каналу. Серверы IRC связаны между собой, чтобы обеспечить глобальную сеть с уникальными каналами.
+
+Обязательная часть
+Название программы ircserv
+Сдать файлы
+Makefile Да
+Аргументы
+Внешние функции. Все в C ++ 98. socket, setsockopt,
+getsockname, getprotobyname, gethostbyname,
+getaddrinfo, freeaddrinfo, привязать, подключить, слушать,
+accept, htons, htonl, ntohs, ntohl, inet_addr,
+inet_ntoa, send, recv, signal, lseek, fstat, fcntl, poll (или эквивалент)
+Libft авторизован
+Описание Написать IRC-сервер на C ++ 98
+• Вы должны написать IRC-сервер на C ++ 98.
+• Если вам нужно больше функций C, вы можете их использовать, но всегда предпочитайте C ++.
+• Стандарт C ++ должен быть C ++ 98. Ваш проект должен компилироваться с ним.
+• Нет внешней библиотеки, нет Boost и т. Д.
+• Старайтесь всегда использовать как можно больше кода "C ++" (например, используйте <cstring> вместо <string.h>).
+• В теме и шкале мы будем упоминать опрос, но вы можете использовать его эквиваленты, такие как select, kqueue, epoll.
+• Связь между клиентом и сервером должна осуществляться через TCP / IP (v4) или (v6).
+• Вам не нужно кодировать клиента.
+• Вам не нужно обрабатывать обмен данными между серверами.
+• Ваш исполняемый файл будет использоваться следующим образом:
+./ircserv [хост: сеть_портов: сеть_паролей] <порт> <пароль>
+
+◦ host - имя хоста, к которому IRC должен подключиться, чтобы присоединиться к уже существующей сети.
+◦ port_network - это порт сервера, к которому IRC должен подключаться на хосте.
+◦ password_network - это пароль, необходимый для подключения к хосту.
+◦ порт - это номер порта, на котором ваш сервер будет принимать входящие соединения.
+◦ пароль - это пароль, необходимый любому IRC-клиенту, который хочет подключиться к вашему серверу.
+◦ Если host, port_network и password_network не указаны, необходимо создать новую сеть IRC.
+• Сервер должен иметь возможность обрабатывать несколько клиентов одновременно и никогда не зависать. Разветвление запрещено, все операции ввода-вывода должны быть неблокирующими и использовать только 1 опрос (или эквивалент) для всех (чтение, запись, но также и прослушивание, ...)
+!
+Мы разрешили вам использовать fcntl, потому что MacOS X не поддерживает запись
+так же, как и в других ОС Unix.
+Вы должны использовать неблокирующий FD, чтобы результат был аналогичен другим ОС.
+!
+Поскольку вы используете неблокирующий FD, вы можете использовать read / recv или
+функции записи / отправки без опроса (или эквивалента) и вашего сервера
+не будет блокировать. Но это потребовало бы больше системных ресурсов.
+Итак, снова пытаемся читать / получать или писать / отправлять в любом FD, не переходя
+через опрос (или аналогичный) даст вам оценку, равную 0 и
+конец оценки.
+!
+Вы можете использовать только fcntl следующим образом: fcntl (fd, F_SETFL, O_NONBLOCK);
+Любые другие флаги запрещены.
+
+• Конечно, от вас ожидается создание чистого кода. Проверяйте абсолютно все ошибки и в тех случаях, когда у вас могут быть проблемы (получены частичные данные, низкая пропускная способность ...)
+• Чтобы убедиться, что ваш сервер правильно использует все, что вы отправляете, начальный тест может быть выполнен с помощью nc (используйте ctrl + d для отправки частей команды):
+
+\ $> NC 127.0.0.1 6667
+com ^ Dman ^ Dd
+\ $>
+
+Это позволит вам сначала отправить письма com, man, d \ n. Вы должны сначала объединить пакеты, чтобы перестроить команду command для ее обработки.
+• Существует несколько клиентов IRC, вы должны выбрать одного в качестве справочного, и он будет использоваться во время защиты.
+Чтобы быть совместимым с этим клиентом, вам необходимо реализовать хотя бы некоторую часть официального RFC IRC.
+• Использование клиента на вашем сервере должно быть похоже на использование его на любом официальном сервере IRC, но для уверенности мы перечислим минимально необходимые функции.
+• Вы должны иметь возможность подключить эталонный клиент к вашему серверу без каких-либо ошибок.
+• Вы должны иметь возможность аутентифицироваться, установить псевдоним, имя пользователя, присоединиться к каналу, отправлять и получать личные сообщения с помощью этого клиента.
+• все сообщения от одного клиента на канале отправляются всем остальным клиентам канала.
+• У вас должны быть операторы и постоянные пользователи.
+• Некоторые действия / команды оператора.
