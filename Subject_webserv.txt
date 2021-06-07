@@ -1,0 +1,160 @@
+Mandatory part
+Program name webserv
+Turn in files
+Makefile Yes
+Arguments
+External functs. Everything in C++ 98. htons, htonl, ntohs, ntohl,
+select, poll, epoll, kqueue, socket, accept,
+listen, send, recv, bind, connect, inet_addr,
+setsockopt, getsockname, fcntl.
+Libft authorized No
+Description Write an HTTP server in C++ 98
+• You must write an HTTP server in C++ 98.
+• If you need more C functions, you can use them but always prefer C++.
+• The C++ standard must be C++ 98. Your project must compile with it.
+• No external library, no Boost, etc...
+• Try to always use the most "C++" code possible (for example use <cstring> over <string.h>).
+• Your server must be compatible with the web browser of your choice.
+• We will consider that Nginx is HTTP 1.1 compliant and may be used to compare headers and answer behaviors.
+• In the subject and the scale we will mention poll but you can use equivalent like select, kqueue, epoll.
+• It must be non-blocking and use only 1 poll (or equivalent) for all the IO between the client and the server (listens includes).
+• poll (or equivalent) should check read and write at the same time.
+• Your server should never block and the client should be bounce properly if necessary.
+• You should never do a read operation or a write operation without going through poll (or equivalent).
+• Checking the value of errno is strictly forbidden after a read or a write operation.
+• A request to your server should never hang forever.
+• You server should have default error pages if none are provided.
+• Your program should not leak and should never crash, (even when out of memory if all the initialization is done)
+• You can’t use fork for something else than CGI (like php or python etc...)
+• You can’t execve another webserver...
+• Your program should have a config file in argument or use a default path.
+• You don’t need to use poll (or equivalent) before reading your config file.
+• You should be able to serve a fully static website.
+• Client should be able to upload files.
+• Your HTTP response status codes must be accurate.
+• You need at least GET, POST, and DELETE methods.
+• Stress tests your server it must stay available at all cost.
+• Your server can listen on multiple ports (See config file).
+!
+We’ve let you use fcntl because mac os X doesn’t implement write the same way as other Unix OS.
+You must use non-blocking FD to have a result similar to other OS.
+!
+Because you are using non-blocking FD, you could use read/recv or write/send functions without polling (or equivalent) and your server would be not blocking. But we don’t want that.
+!
+Again trying to read/recv or write/send in any FD without going
+through a poll (or equivalent) will give you a mark equal to 0 and
+the end of the evaluation.
+You can only use fcntl as follow: fcntl(fd, F_SETFL, O_NONBLOCK); Any other flags are forbidden
+
+In this config file we should be able to:
+You can inspire yourself from the "server" part of Nginx
+configuration file
+◦ choose the port and host of each "server"
+◦ setup the server_names or not
+◦ The first server for a host:port will be the default for this host:port (meaning it will answer to all request that doesn’t belong to an other server)
+◦ setup default error pages
+◦ limit client body size
+◦ setup routes with one or multiple of the following rules/configuration (routes wont be using regexp):
+∗ define a list of accepted HTTP Methods for the route
+∗ define an HTTP redirection.
+∗ define a directory or a file from where the file should be search (for example if url /kapouet is rooted to /tmp/www, url /kapouet/pouic/toto/pouet is /tmp/www/pouic/toto/pouet)
+∗ turn on or off directory listing
+∗ default file to answer if the request is a directory
+∗ execute CGI based on certain file extension (for example .php)
+· You wonder what a CGI is ?
+· Because you won’t call the CGI directly use the full path as PATH_INFO
+· Just remembers that for chunked request, your server needs to unchunked it and the CGI will expect EOF as end of the body.
+· Same things for the output of the CGI. if no content_length is returned from the CGI, EOF will mean the end of the returned data.
+· Your program should call the cgi with the file requested as first argument
+· the cgi should be run in the correct directory for relativ path file access
+· your server should work with one CGI (php-cgi, python...)
+∗ make the route able to accept uploaded files and configure where it should be saved
+
+You must provide some configuration files and default basic files to test/demonstrate every feature is working during evaluation.
+
+If you’ve got a question about one behavior, you should compare your program behavior with Nginx. For example, check how server_name works... We’ve shared with you a small tester it’s not mandatory to pass it if everything works fine with your browser and tests but it can help you hunt some bugs.
+
+Please read the RFC and do some tests with telnet and Nginx before starting this project. Even if you don’t have to implement all the RFC reading it will help you make the required features.
+The important thing is resilience. Your server should never die.
+Do not test with only one program, write your test with a language quick to write/use, like python or golang, etc... you can even do your test in c or c++
+
+
+
+
+Обязательная часть
+Название программы webserv
+Сдать файлы
+Makefile Да
+Аргументы
+Внешние функции. Все в C ++ 98. htons, htonl, ntohs, ntohl,
+выберите, опрос, epoll, kqueue, сокет, принять,
+слушать, отправлять, получать, связывать, подключаться, inet_addr,
+setsockopt, getsockname, fcntl.
+Libft разрешен Нет
+Описание Написать HTTP-сервер на C ++ 98
+• Вы должны написать HTTP-сервер на C ++ 98.
+• Если вам нужно больше функций C, вы можете их использовать, но всегда предпочитайте C ++.
+• Стандарт C ++ должен быть C ++ 98. Ваш проект должен компилироваться с ним.
+• Нет внешней библиотеки, нет Boost и т. Д.
+• Старайтесь всегда использовать как можно больше кода "C ++" (например, используйте <cstring> вместо <string.h>).
+• Ваш сервер должен быть совместим с выбранным вами веб-браузером.
+• Мы будем считать, что Nginx совместим с HTTP 1.1 и может использоваться для сравнения заголовков и поведения ответов.
+• В теме и шкале мы будем упоминать опрос, но вы можете использовать его эквиваленты, такие как select, kqueue, epoll.
+• Он должен быть неблокирующим и использовать только 1 опрос (или эквивалент) для всех операций ввода-вывода между клиентом и сервером (включая прослушивание).
+• poll (или эквивалент) должен проверять чтение и запись одновременно.
+• Ваш сервер ни в коем случае не должен блокироваться, и при необходимости клиент должен правильно отскакивать.
+• Вы никогда не должны выполнять операцию чтения или записи, не пройдя опрос (или эквивалент).
+• Строго запрещено проверять значение errno после операции чтения или записи.
+• Запрос к вашему серверу никогда не должен зависать вечно.
+• На вашем сервере должны быть страницы ошибок по умолчанию, если они не указаны.
+• Ваша программа не должна протекать и никогда не должна падать (даже при нехватке памяти, если вся инициализация выполнена)
+• Вы не можете использовать fork для чего-то еще, кроме CGI (например, php, python и т. Д.)
+• Вы не можете запустить другой веб-сервер ...
+• Ваша программа должна иметь в качестве аргумента файл конфигурации или использовать путь по умолчанию.
+• Вам не нужно использовать опрос (или эквивалент) перед чтением файла конфигурации.
+• Вы должны иметь возможность обслуживать полностью статический веб-сайт.
+• Клиент должен иметь возможность загружать файлы.
+• Коды состояния ответа HTTP должны быть точными.
+• Вам нужны как минимум методы GET, POST и DELETE.
+• Стресс-тесты вашего сервера: он должен оставаться доступным любой ценой.
+• Ваш сервер может прослушивать несколько портов (см. Файл конфигурации).
+!
+Мы разрешили вам использовать fcntl, потому что mac os X не поддерживает запись так же, как другие ОС Unix.
+Вы должны использовать неблокирующий FD, чтобы результат был аналогичен другим ОС.
+!
+Поскольку вы используете неблокирующий FD, вы можете использовать функции чтения / получения или записи / отправки без опроса (или аналогичного), и ваш сервер не будет блокировать. Но мы этого не хотим.
+!
+Снова пытаюсь читать / получать или писать / отправлять в любом FD без
+через опрос (или аналогичный) даст вам оценку, равную 0 и
+конец оценки.
+Вы можете использовать только fcntl следующим образом: fcntl (fd, F_SETFL, O_NONBLOCK); Любые другие флаги запрещены
+
+В этом конфигурационном файле мы должны уметь:
+Вы можете вдохновиться «серверной» частью Nginx
+конфигурационный файл
+◦ выберите порт и хост каждого «сервера»
+◦ настроить server_names или нет
+◦ Первый сервер для host: port будет по умолчанию для этого host: port (то есть он будет отвечать на все запросы, которые не принадлежат другому серверу)
+◦ настроить страницы ошибок по умолчанию
+◦ ограничить размер тела клиента
+◦ настроить маршруты с одним или несколькими из следующих правил / конфигураций (маршруты не будут использовать регулярное выражение):
+* Определить список допустимых HTTP-методов для маршрута
+* Определить перенаправление HTTP.
+* Определить каталог или файл, в котором файл должен быть найден (например, если url / kapouet укоренен в / tmp / www, url / kapouet / pouic / toto / pouet будет / tmp / www / pouic / toto / pouet)
+* Включить или выключить список каталогов
+* Файл по умолчанию для ответа, если запрос является каталогом
+* Выполнять CGI на основе определенного расширения файла (например .php)
+· Вам интересно, что такое CGI?
+· Поскольку вы не будете вызывать CGI напрямую, используйте полный путь как PATH_INFO
+· Просто помнит, что для запроса с фрагментами ваш сервер должен его отключить, и CGI будет ожидать EOF как конец тела.
+· То же самое для вывода CGI. если от CGI не возвращается content_length, EOF будет означать конец возвращаемых данных.
+· Ваша программа должна вызывать cgi с запрошенным файлом в качестве первого аргумента
+· Cgi должен запускаться в правильном каталоге для доступа к файлу относительного пути
+· Ваш сервер должен работать с одним CGI (php-cgi, python ...)
+* Сделать маршрут способным принимать загруженные файлы и настроить, где они должны быть сохранены
+Вы должны предоставить некоторые файлы конфигурации и базовые файлы по умолчанию для тестирования / демонстрации работы каждой функции во время оценки.
+Если у вас есть вопрос об одном поведении, вам следует сравнить поведение вашей программы с Nginx. Например, проверьте, как работает server_name ... Мы поделились с вами небольшим тестером. Его необязательно проходить, если все работает с вашим браузером и тестирует, но он может помочь вам найти некоторые ошибки.
+Пожалуйста, прочтите RFC и проведите несколько тестов с telnet и Nginx перед запуском этого проекта. Даже если вам не нужно реализовывать все
+Прочтение RFC поможет вам реализовать необходимые функции.
+Главное - стойкость. Ваш сервер никогда не должен умирать.
+Не тестируйте только одну программу, напишите свой тест на языке, который можно быстро писать / использовать, например python или golang и т. Д. Вы даже можете выполнить свой тест на c или c ++
